@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Happy Birthday Konkona ❤️</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(135deg, #ff9a9e, #fad0c4);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      text-align: center;
+      color: #fff;
+      overflow: hidden;
+      flex-direction: column;
+    }
+
+    .container {
+      padding: 20px;
+      max-width: 520px;
+    }
+
+    h1 {
+      font-size: 2.2rem;
+    }
+
+    p {
+      font-size: 1.05rem;
+      margin-top: 15px;
+      min-height: 120px;
+      line-height: 1.5;
+    }
+
+    button {
+      margin-top: 20px;
+      padding: 12px 20px;
+      font-size: 1rem;
+      border: none;
+      border-radius: 25px;
+      background: #ff6b81;
+      color: white;
+      cursor: pointer;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    }
+
+    canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      pointer-events: none;
+    }
+
+    .popup {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) scale(0);
+      background: white;
+      color: #333;
+      padding: 25px;
+      border-radius: 20px;
+      text-align: center;
+      width: 85%;
+      max-width: 320px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+      transition: 0.4s;
+      z-index: 10;
+    }
+
+    .popup.show {
+      transform: translate(-50%, -50%) scale(1);
+    }
+
+    .popup h2 {
+      margin: 0 0 10px 0;
+      font-size: 1.2rem;
+    }
+
+    .popup img {
+      width: 100%;
+      margin-top: 15px;
+      border-radius: 15px;
+      display: none;
+    }
+
+    @media (max-width: 600px) {
+      h1 { font-size: 1.7rem; }
+      p { font-size: 0.95rem; }
+    }
+  </style>
+</head>
+<body>
+
+<canvas id="confetti"></canvas>
+
+<div class="container">
+  <h1>Happy Birthday, KONKONA BHOWMICK 🎉❤️</h1>
+  <p id="message"></p>
+  <button onclick="startCelebration()">Tap to Celebrate 🎊</button>
+</div>
+
+<div class="popup" id="popup">
+  <h2 id="finalMsg"></h2>
+  <!-- Replace 'her.jpg' with your girlfriend's photo file name -->
+  <img id="herPhoto" src="her.jpeg" alt="Her Photo">
+</div>
+
+<script>
+const text1 = `hiii..... wishing you veryy happy birthday.... bhaii ami jani na samne kii bhave wishh korboo... mane samne too wishh korbooii likee jaii hookk.. kintu amii litterallyy 1week or 2 week dhore bhavchilam kii kora jaii tr birthday tee ... onek kichuu bheveeoo chilamm kintuu yrrrr oii shobsomai r moton fumble kore dii last ee ese ...`;
+
+const text2 = `\n\nSo yeeahh kii bolboo bhaii....ami too bhavchilam oii shob likhhboo """you are my whole world....""" kintu khub cringe lagchilo.. taii kichuii likhii nii... ekhon to mone hochee english er essay lekhar moton likhchii🤣🤣🤣🤣🤣..shala story dilamm setaaooo bara aritra r sathe mile gechee ... gift  ouu shala tke jigesa kore dichii !!!bhaaiii seriouslyyy kharapp lagchee ...`;
+
+const finalText = `bhaaii amii hoiitoo tkee bhaloo kore appreciate korte parii na or baki der moton bhaii surprise diteoo parii na .but you will fill happy around me ..... ❤️`;
+
+let index = 0;
+let currentText = text1;
+let phase = 1;
+
+function typeEffect() {
+  if (index < currentText.length) {
+    document.getElementById("message").innerHTML += currentText.charAt(index);
+    index++;
+    setTimeout(typeEffect, 40);
+  } else {
+    if (phase === 1) {
+      setTimeout(() => {
+        currentText = text2;
+        index = 0;
+        phase = 2;
+        typeEffect();
+      }, 800);
+    } else if (phase === 2) {
+      setTimeout(showFinalPopup, 1000);
+    }
+  }
+}
+
+function showFinalPopup() {
+  const popup = document.getElementById("popup");
+  const finalMsg = document.getElementById("finalMsg");
+  const photo = document.getElementById("herPhoto");
+
+  let i = 0;
+  popup.classList.add("show");
+
+  function typeFinal() {
+    if (i < finalText.length) {
+      finalMsg.innerHTML += finalText.charAt(i);
+      i++;
+      setTimeout(typeFinal, 40);
+    } else {
+      // show image after text finishes
+      photo.style.display = "block";
+    }
+  }
+
+  typeFinal();
+}
+
+const canvas = document.getElementById('confetti');
+const ctx = canvas.getContext('2d');
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+
+let confetti = [];
+
+function createConfetti() {
+  for (let i = 0; i < 180; i++) {
+    confetti.push({
+      x: Math.random() * canvas.width,
+      y: Math.random() * canvas.height - canvas.height,
+      r: Math.random() * 6 + 2,
+      d: Math.random() * 50,
+      color: `hsl(${Math.random()*360},100%,50%)`
+    });
+  }
+}
+
+function drawConfetti() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  confetti.forEach((c, i) => {
+    ctx.beginPath();
+    ctx.fillStyle = c.color;
+    ctx.fillRect(c.x, c.y, c.r, c.r);
+  });
+  updateConfetti();
+}
+
+function updateConfetti() {
+  confetti.forEach((c, i) => {
+    c.y += Math.cos(c.d) + 1 + c.r / 2;
+    c.x += Math.sin(c.d);
+
+    if (c.y > canvas.height) {
+      confetti[i] = {
+        x: Math.random() * canvas.width,
+        y: -10,
+        r: c.r,
+        d: c.d,
+        color: c.color
+      };
+    }
+  });
+}
+
+function startCelebration() {
+  createConfetti();
+  setInterval(drawConfetti, 20);
+  typeEffect();
+}
+
+window.addEventListener('resize', () => {
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+});
+</script>
+
+</body>
+</html>
